@@ -5,13 +5,15 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
     public float speed = 12.0f;
     float padding;
-    float xmin;
-    float xmax;
+    public float xmin;
+    public float xmax;
+    public GameObject laser;
 	// Use this for initialization
 	void Start () {
         float distance = transform.position.z - Camera.main.transform.position.z;
         Vector3 leftmost = Camera.main.ViewportToWorldPoint(new Vector3(0,0,distance));
         Vector3 rightmost = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, distance));
+        //gets distance from centre to edge of sprite and uses to prevent overflow
         padding = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.extents.x;
         xmin = leftmost.x + padding;
         xmax = rightmost.x - padding;
@@ -32,6 +34,10 @@ public class PlayerController : MonoBehaviour {
 
         transform.position = new Vector3(newX, transform.position.y, transform.position.z);
 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Instantiate(laser, transform.position, Quaternion.identity);
+        }
     }
 
 
