@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour {
     public GameObject laser;
     public float projectileSpeed;
     public float fireRate = 0.4f;
+    public float health = 300;
 
 	// Use this for initialization
 	void Start () {
@@ -46,6 +47,7 @@ public class PlayerController : MonoBehaviour {
         {
             CancelInvoke("Fire");
         }
+        
     }
     //fire laser
     void Fire()
@@ -53,5 +55,21 @@ public class PlayerController : MonoBehaviour {
         GameObject playerLaser = Instantiate(laser, transform.position, Quaternion.identity) as GameObject;
         playerLaser.GetComponent<Rigidbody2D>().velocity = new Vector3(0, projectileSpeed, 0);
     }
+    private void OnTriggerEnter2D(Collider2D hit)
+    {
+        EnemyProjectile laser = hit.gameObject.GetComponent<EnemyProjectile>();
 
+        if (laser)
+        {
+            Debug.Log("Player hit");
+            //call hit function from projectile
+            laser.Hit();
+            health -= laser.GetDamage();
+            //Enemy death
+            if (health <= 0)
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
 }
