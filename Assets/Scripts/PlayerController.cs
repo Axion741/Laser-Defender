@@ -8,6 +8,9 @@ public class PlayerController : MonoBehaviour {
     public float xmin;
     public float xmax;
     public GameObject laser;
+    public float projectileSpeed;
+    public float fireRate = 0.4f;
+
 	// Use this for initialization
 	void Start () {
         float distance = transform.position.z - Camera.main.transform.position.z;
@@ -22,7 +25,8 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKey(KeyCode.A))
+        //movement
+        if (Input.GetKey(KeyCode.A))
         {
             transform.position += Vector3.left * speed * Time.deltaTime;
         }
@@ -33,12 +37,21 @@ public class PlayerController : MonoBehaviour {
         float newX = Mathf.Clamp(transform.position.x, xmin, xmax);
 
         transform.position = new Vector3(newX, transform.position.y, transform.position.z);
-
+        //call "Fire" on keydown and repeat
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Instantiate(laser, transform.position, Quaternion.identity);
+            InvokeRepeating("Fire", 0.00001f, fireRate);
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            CancelInvoke("Fire");
         }
     }
-
+    //fire laser
+    void Fire()
+    {
+        GameObject playerLaser = Instantiate(laser, transform.position, Quaternion.identity) as GameObject;
+        playerLaser.GetComponent<Rigidbody2D>().velocity = new Vector3(0, projectileSpeed, 0);
+    }
 
 }
