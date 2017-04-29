@@ -10,10 +10,19 @@ public class EnemyProperties : MonoBehaviour {
     public float projectileSpeed;
     private float fireRate = 0.5f;
     public GameObject elaser;
+    public int scoreValue = 150;
+    public AudioClip ShipHit;
+    public AudioClip Explosion;
+    public GameObject ParticleExplosion;
+
+    private ScoreKeeper scoreKeeper;
+    Animator animator;
+
 
 	// Use this for initialization
 	void Start () {
-		
+        scoreKeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
+        animator = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -28,7 +37,7 @@ public class EnemyProperties : MonoBehaviour {
         timesHit++;
        
         PlayerProjectile laser = hit.gameObject.GetComponent<PlayerProjectile>();
-        
+        scoreKeeper.Score(scoreValue);
         //detects firetype and acts appropriately
         if (laser)
         {
@@ -36,9 +45,12 @@ public class EnemyProperties : MonoBehaviour {
             //call hit function from projectile
             laser.Hit();
             health -= laser.GetDamage();
+            AudioSource.PlayClipAtPoint(ShipHit, transform.position);
             //Enemy death
             if (health <= 0)
             {
+                AudioSource.PlayClipAtPoint(Explosion, transform.position);
+                GameObject particleExplosion = Instantiate(ParticleExplosion, transform.position, Quaternion.identity);
                 Destroy(gameObject);
             }
         } 
