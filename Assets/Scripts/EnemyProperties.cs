@@ -16,13 +16,13 @@ public class EnemyProperties : MonoBehaviour {
     public GameObject ParticleExplosion;
 
     private ScoreKeeper scoreKeeper;
-    Animator animator;
+    
 
 
 	// Use this for initialization
 	void Start () {
         scoreKeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
-        animator = GetComponent<Animator>();
+        
 	}
 	
 	// Update is called once per frame
@@ -50,7 +50,7 @@ public class EnemyProperties : MonoBehaviour {
             if (health <= 0)
             {
                 AudioSource.PlayClipAtPoint(Explosion, transform.position);
-                GameObject particleExplosion = Instantiate(ParticleExplosion, transform.position, Quaternion.identity);
+                Instantiate(ParticleExplosion, transform.position, Quaternion.identity);
                 Destroy(gameObject);
             }
         } 

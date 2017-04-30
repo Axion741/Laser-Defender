@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour {
     public float fireRate = 0.4f;
     public float health = 300;
 
+    public LevelManager levelManager;
+
 	// Use this for initialization
 	void Start () {
         float distance = transform.position.z - Camera.main.transform.position.z;
@@ -68,6 +70,8 @@ public class PlayerController : MonoBehaviour {
             //Enemy death
             if (health <= 0)
             {
+                LevelManager load = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+                load.LoadLevel("Win");
                 Destroy(gameObject);
             }
         }
